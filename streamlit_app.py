@@ -118,6 +118,10 @@ user_input = pd.DataFrame([{
 
 user_encoded = encoder.transform(user_input)
 
+# гарантируем те же столбцы, что и при обучении
+user_encoded = user_encoded[X_train_encoded.columns]
+
+
 # ==============================
 # 🔮 Предсказание
 # ==============================
