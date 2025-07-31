@@ -19,7 +19,8 @@ st.write('## Работа с датасетом Titanic')
 # ==============================
 # Загрузи train.csv в корень проекта или используй GitHub-ссылку:
 # df = pd.read_csv("https://raw.githubusercontent.com/username/repo/main/train.csv")
-df = pd.read_csv("train.csv")  # файл лежит в корне проекта
+df = pd.read_csv("https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv")
+
 
 st.subheader("🔍 10 случайных строк")
 st.dataframe(df.sample(10), use_container_width=True)
