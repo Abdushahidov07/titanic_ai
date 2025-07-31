@@ -27,7 +27,7 @@ st.dataframe(df.sample(10), use_container_width=True)
 # ==============================
 df['Age'].fillna(df['Age'].median(), inplace=True)
 df['Fare'].fillna(df['Fare'].median(), inplace=True)
-df['Cabin'] = df['Cabin'].notna().astype(int)  # 1 если есть каюта, 0 если нет
+df['Cabin'] = df['Cabin'].notna().astype(int)
 df['Embarked'].fillna(df['Embarked'].mode()[0], inplace=True)
 
 # ==============================
@@ -56,7 +56,6 @@ y = df['Survived']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-# Кодирование категориальных признаков
 encoder = ce.TargetEncoder(cols=['Sex', 'Embarked'])
 X_train_encoded = encoder.fit_transform(X_train, y_train)
 X_test_encoded = encoder.transform(X_test)
@@ -90,18 +89,23 @@ st.write(f"**Test Accuracy:** {acc_test:.2f}")
 st.write(f"**ROC-AUC:** {roc_auc:.2f}")
 
 # ==============================
-# 🎛 Форма для предсказания
+# 🎛 Форма для предсказания (снизу)
 # ==============================
-with st.sidebar.form("prediction_form"):
-    st.subheader("🔮 Предсказание выживания")
-    pclass_input = st.selectbox("Класс билета", sorted(df['Pclass'].unique()))
-    sex_input = st.selectbox("Пол", df['Sex'].unique())
-    age_input = st.slider("Возраст", 0, 80, int(df['Age'].median()))
-    sibsp_input = st.slider("SibSp (Братья/Сёстры)", 0, int(df['SibSp'].max()), 0)
-    parch_input = st.slider("Parch (Родители/Дети)", 0, int(df['Parch'].max()), 0)
-    fare_input = st.slider("Стоимость билета", float(df['Fare'].min()), float(df['Fare'].max()), float(df['Fare'].median()))
-    embarked_input = st.selectbox("Порт посадки", df['Embarked'].unique())
-    cabin_input = st.selectbox("Каюта указана?", [0, 1])
+st.subheader("🔮 Ввод данных для предсказания")
+
+with st.form("prediction_form"):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        pclass_input = st.selectbox("Класс билета", sorted(df['Pclass'].unique()))
+        sex_input = st.selectbox("Пол", df['Sex'].unique())
+        age_input = st.slider("Возраст", 0, 80, int(df['Age'].median()))
+    with col2:
+        sibsp_input = st.slider("SibSp (Братья/Сёстры)", 0, int(df['SibSp'].max()), 0)
+        parch_input = st.slider("Parch (Родители/Дети)", 0, int(df['Parch'].max()), 0)
+        fare_input = st.slider("Стоимость билета", float(df['Fare'].min()), float(df['Fare'].max()), float(df['Fare'].median()))
+    with col3:
+        embarked_input = st.selectbox("Порт посадки", df['Embarked'].unique())
+        cabin_input = st.selectbox("Каюта указана?", [0, 1])
 
     submit_button = st.form_submit_button("Предсказать")
 
@@ -124,7 +128,7 @@ if submit_button:
     proba = best_model.predict_proba(user_encoded)[0]
 
     result = "✅ Выжил" if prediction == 1 else "❌ Не выжил"
-    st.sidebar.markdown(f"### Результат: **{result}**")
+    st.markdown(f"### Результат: **{result}**")
 
     proba_df = pd.DataFrame({'Класс': ['Не выжил', 'Выжил'], 'Вероятность': proba})
-    st.sidebar.dataframe(proba_df.set_index("Класс"), use_container_width=True)
+    st.dataframe(proba_df.set_index("Класс"), use_container_width=True)
