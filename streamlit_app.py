@@ -29,8 +29,6 @@ with col2:
     fig2 = px.histogram(df, x='Pclass', color="Survived", barmode="group", title="Выживание по классу")
     st.plotly_chart(fig2, use_container_width=True)
 
-fig3 = px.violin(df, x="Survived", y="Age", color="Survived", box=True, points="all", title="Возраст пассажиров и выживание")
-st.plotly_chart(fig3, use_container_width=True)
 
 X = df.drop(['Survived', 'PassengerId', 'Name', 'Ticket'], axis=1)
 y = df['Survived']
