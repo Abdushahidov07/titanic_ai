@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import accuracy_score, roc_auc_score
+from sklearn.metrics import accuracy_score, roc_auc_score, roc_curve
 from sklearn.ensemble import RandomForestClassifier
 import category_encoders as ce
 import plotly.express as px
@@ -56,6 +56,12 @@ roc_auc = roc_auc_score(y_test, best_model.predict_proba(X_test_encoded)[:, 1])
 st.write(f"**Train Accuracy:** {acc_train:.2f}")
 st.write(f"**Test Accuracy:** {acc_test:.2f}")
 st.write(f"**ROC-AUC:** {roc_auc:.2f}")
+
+fpr, tpr, _ = roc_curve(y_test, best_model.predict_proba(X_test_encoded)[:, 1])
+roc_df = pd.DataFrame({'FPR': fpr, 'TPR': tpr})
+roc_fig = px.line(roc_df, x='FPR', y='TPR', title=f"ROC-кривая (AUC={roc_auc:.2f})")
+roc_fig.add_shape(type='line', line=dict(dash='dash', color='red'), x0=0, x1=1, y0=0, y1=1)
+st.plotly_chart(roc_fig, use_container_width=True)
 
 st.subheader("🔮 Ввод данных для предсказания")
 with st.form("prediction_form"):
