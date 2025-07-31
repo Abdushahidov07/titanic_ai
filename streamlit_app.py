@@ -17,18 +17,9 @@ st.write('## Работа с датасетом Titanic')
 # ==============================
 # 📥 Загрузка данных
 # ==============================
-import kagglehub
-import os
-
-# Скачиваем датасет
-path = kagglehub.dataset_download("heptapod/titanic")
-
-
-# Загружаем основной файл
-file_path = os.path.join(path, "train.csv")  # или test.csv при необходимости
-df = pd.read_csv(file_path)
-
-
+# Загрузи train.csv в корень проекта или используй GitHub-ссылку:
+# df = pd.read_csv("https://raw.githubusercontent.com/username/repo/main/train.csv")
+df = pd.read_csv("train.csv")  # файл лежит в корне проекта
 
 st.subheader("🔍 10 случайных строк")
 st.dataframe(df.sample(10), use_container_width=True)
@@ -37,7 +28,6 @@ st.dataframe(df.sample(10), use_container_width=True)
 # 🧹 Обработка данных
 # ==============================
 
-# Заполнение пропусков
 df['Age'].fillna(df['Age'].median(), inplace=True)
 df['Fare'].fillna(df['Fare'].median(), inplace=True)
 df['Cabin'] = df['Cabin'].notna().astype(int)  # 1 если есть каюта, 0 если нет
@@ -57,7 +47,6 @@ with col2:
     fig2 = px.histogram(df, x='Pclass', color="Survived", barmode="group", title="Выживание по классу")
     st.plotly_chart(fig2, use_container_width=True)
 
-# Дополнительный график: возраст vs выживание
 fig3 = px.violin(df, x="Survived", y="Age", color="Survived", box=True, points="all",
                  title="Возраст пассажиров и выживание")
 st.plotly_chart(fig3, use_container_width=True)
@@ -90,7 +79,6 @@ grid = GridSearchCV(RandomForestClassifier(random_state=42), param_grid, cv=3, s
 grid.fit(X_train_encoded, y_train)
 
 best_model = grid.best_estimator_
-
 st.write(f"**Лучшие параметры:** {grid.best_params_}")
 
 # ==============================
