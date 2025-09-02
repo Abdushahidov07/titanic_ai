@@ -1,7 +1,8 @@
 streamlit
 pandas
 scikit-learn
+xgboost
+catboost
+category-encoders
 plotly
-category_encoders
-numpy
-kagglehub
+openpyxl
