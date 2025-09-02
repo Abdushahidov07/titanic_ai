@@ -11,7 +11,7 @@ st.title("📡 Telco Customer Churn Predictor - Обучение и предск
 st.write("## Работа с датасетом Telco")
 
 # 1. Загружаем датасет
-df = pd.read_excel(""https://raw.githubusercontent.com/datasciencedojo/datasets/master/Telco_customer_churn.xlsx")
+df = pd.read_excel("https://raw.githubusercontent.com/datasciencedojo/datasets/master/Telco_customer_churn.xlsx")
 
 st.subheader("🔍 10 случайных строк")
 st.dataframe(df.sample(10), use_container_width=True)
