@@ -22,14 +22,12 @@ df["Total Charges"] = pd.to_numeric(df["Total Charges"], errors="coerce")
 # Удаляем пустые по Total Charges
 df.dropna(subset=["Total Charges"], inplace=True)
 
-# Безопасно удалим идентификатор
 df.drop(columns=["CustomerID"], errors="ignore", inplace=True)
 
 # 3) Целевая переменная и фичи
 # Цель — бинарная колонка 0/1
 y = df["Churn Value"]
 
-# Используем РОВНО те признаки, которые собираем в форме (чтобы не было несоответствий на инференсе)
 feature_cols = [
     "Gender",
     "Senior Citizen",
@@ -146,10 +144,8 @@ if submit_button:
         "Total Charges": total,
     }])
 
-    # Точно те же преобразования, что и на трейне
     user_encoded = encoder.transform(user_input)
 
-    # Выравниваем порядок/набор колонок
     user_encoded = user_encoded[X_train_enc.columns]
 
     prediction = best_model.predict(user_encoded)[0]
